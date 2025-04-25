@@ -1,0 +1,50 @@
+﻿<Window x:Class="LabWork31.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LabWork31"
+        mc:Ignorable="d"
+        Title="Профиль пользователя" Height="450" Width="800">
+    <StackPanel Margin="10">
+        <Label Content="_Логин"
+               Target="{Binding ElementName=TextBoxLogin}"/>
+        <TextBox x:Name="TextBoxLogin"
+                 MaxLength="30"/>
+
+        <Label Content="_Еmail"
+               Target="{Binding ElementName=TextBoxEmail}"/>
+        <TextBox x:Name="TextBoxEmail"
+                 MaxLength="100"/>
+
+        <Label Content="Пароль"
+               Target="{Binding ElementName=PasswordBoxPassword}"/>
+        <PasswordBox x:Name="PasswordBoxPassword"
+                     PasswordChanged="PasswordBoxPassword_PasswordChanged"/>
+        <TextBlock x:Name="TextBlockPasswordLegth"/>
+
+        <Label Content="Подтверждение пароля"
+               Target="{Binding ElementName=PasswordBoxConfirmPasword}"/>
+        <PasswordBox x:Name="PasswordBoxConfirmPasword"
+                     PasswordChanged="PasswordBoxPassword_PasswordChanged"/>
+
+        <Label Content="Информация о себе"
+               Target="{Binding ElementName=TextBoxInfo}"/>
+        <TextBox x:Name="TextBoxInfo"
+                 MaxLength="200"
+                 AcceptsReturn="True"
+                 Height="50"
+                 TextWrapping="Wrap"
+                 TextChanged="TextBoxInfo_TextChanged"/>
+        <TextBlock x:Name="TextBlockInfoLegth"/>
+        
+        <Label Content="Дата рождения"
+               Target="{Binding ElementName=DatePicterBirthday}"/>
+        <DatePicker x:Name="DatePicterBirthday"
+                    DisplayDateStart="01.01.1900"
+                    SelectedDateChanged="DatePicterBirthday_SelectedDateChanged"/>
+        <TextBlock x:Name="TextBlockAge"/>
+        
+        
+    </StackPanel>
+</Window>

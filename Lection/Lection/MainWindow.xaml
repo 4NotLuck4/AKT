@@ -8,6 +8,20 @@
         Title="MainWindow" Height="450" Width="800">
     <StackPanel>
 
+        <TextBlock>
+            line1
+            <LineBreak/>
+            Line2
+            <LineBreak/>
+            <Run Foreground="Lime" FontStyle="Italic">
+                123
+            </Run>
+        </TextBlock>
+        <Label Target="{Binding ElementName=ExampleTextBox}" Content="_Логин" />
+        <TextBox x:Name="ExampleTextBox"/>
+        <Label Target="{Binding ElementName=PasswordTextBox}" Content="_Пароль" />
+        <TextBox x:Name="PasswordTextBox"/>
+
         <Slider 
             x:Name="PriceSlider"
             Value="10"
@@ -38,15 +52,16 @@
                 <CalendarDateRange Start="04.07.2025" End="04.10.2025"/>
                 <CalendarDateRange Start="04.17.2025" End="04.20.2025"/>
             </Calendar.BlackoutDates>
-            
-            
         </Calendar>
 
+        <Label />
         <DatePicker
             SelectedDateFormat="Long"
             IsDropDownOpen="False"            
             DisplayDateStart="04.04.2025"
-            DisplayDateEnd="05.25.2025"/>
+            DisplayDateEnd="05.25.2025"
+            
+            BorderBrush="Aqua"/>
 
         <TextBox TextChanged="TextBox_TextChanged"
                  
@@ -65,6 +80,11 @@
                  Language="ru"
                  SpellCheck.IsEnabled="True"
                  Text="123">
+        </TextBox>
+        <TextBox
+            x:Name="DataTextBox"
+            >
+            
         </TextBox>
 
         <PasswordBox x:Name="PasswordBox"

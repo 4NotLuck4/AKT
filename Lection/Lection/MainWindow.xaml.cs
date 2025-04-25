@@ -64,7 +64,7 @@ namespace Lection0423
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            //DataTextBox.BorderBrush = DataTextBox.Text.Length > 5 ? Brushes.Black : Brushes.Red;
         }
 
         private void TextBox_SelectionChanged(object sender, RoutedEventArgs e)
@@ -77,11 +77,11 @@ namespace Lection0423
             //var slider = (Slider)sender;
             //slider.SelectionEnd = slider.Value;
             
-            PriceLabel.Content = PriceSlider.Value.ToString("0.00");
-            PriceLabel.Content = $"{PriceSlider.Value: 0.00} руб.";
+            //PriceLabel.Content = PriceSlider.Value.ToString("0.00");
+            //PriceLabel.Content = $"{PriceSlider.Value: 0.00} руб.";
 
-            var price = Math.Round(PriceSlider.Value, 2);
-            PriceLabel.Content = price;
+            //var price = Math.Round(PriceSlider.Value, 2);
+            //PriceLabel.Content = price;
 
         }
     }
