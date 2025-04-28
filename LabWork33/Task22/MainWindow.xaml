@@ -1,0 +1,31 @@
+﻿<Window x:Class="Task22.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task22"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <DataGrid Name="userDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" 
+          AlternatingRowBackground="LightGray" VerticalGridLinesBrush="Transparent">
+            <DataGrid.Columns>
+                <DataGridHyperlinkColumn Header="Адрес" Binding="{Binding Address}" />
+                <DataGridTextColumn Header="Логин" Binding="{Binding Login}" />
+                <DataGridTextColumn Header="Пароль" Binding="{Binding Password}" />
+                <DataGridCheckBoxColumn Header="Архивный" Binding="{Binding IsArchived}" />
+                <DataGridTemplateColumn Header="Скопировать пароль">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Скопировать пароль" Click="CopyPasswordButton_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridComboBoxColumn Header="Категория" 
+                                SelectedItemBinding="{Binding Category}" 
+                                ItemsSource="{Binding Categories}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Window>
