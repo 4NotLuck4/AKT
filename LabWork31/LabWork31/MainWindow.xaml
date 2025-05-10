@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LabWork31"
         mc:Ignorable="d"
-        Title="Профиль пользователя" Height="450" Width="800">
+        Title="Профиль пользователя" Height="800" Width="700">
+<!--Title="Профиль пользователя" Height="450" Width="800">
     <StackPanel Margin="10">
         <Label Content="_Логин"
                Target="{Binding ElementName=TextBoxLogin}"/>
@@ -47,4 +48,77 @@
         
         
     </StackPanel>
+</Window>-->
+
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+        <StackPanel Margin="10">
+            <TextBlock Text="Логин:"/>
+            <TextBox x:Name="TextBoxLogin" MaxLength="30"/>
+
+            <TextBlock Text="Email:"/>
+            <TextBox x:Name="TextBoxEmail" MaxLength="100"/>
+
+            <TextBlock Text="Пароль:"/>
+            <PasswordBox x:Name="PasswordBox"
+                         PasswordChanged="PasswordBox_PasswordChanged"/>
+
+            <TextBlock Text="Потверждение пароля:"/>
+            <PasswordBox x:Name="PasswordBoxConfirm"
+                         PasswordChanged="PasswordBoxConfirm_PasswordChanged"/>
+
+            <TextBlock x:Name="TextBlockPasswordChangen"
+                       Text="Длинна пароля"/>
+
+            <TextBlock Text="Информация о себе:"/>
+            <TextBox x:Name="TextBoxAbout" 
+                     MaxLength="200"
+                     AcceptsReturn="True"
+                     TextChanged="TextBoxAbout_TextChanged"/>
+
+            <TextBlock x:Name="TextBlockRemainingChars"
+                       Text="Осталось 200 символов"/>
+
+            <Label Content="Дата рождения"/>
+            <DatePicker x:Name="DatePickerBirthDate"
+                        DisplayDateStart="01.01.1900"
+                        SelectedDateChanged="DatePickerBirthDate_SelectedDateChanged"/>
+
+            <TextBlock x:Name="TextBlockAge"
+                       Text="Возраст"/>
+
+            <TextBlock Text="Стаж:"/>
+            <Slider x:Name="SliderExperience"
+                    Minimum="0" Maximum="50"
+                    TickFrequency="5"
+                    ValueChanged="SliderExperience_ValueChanged"/>
+            <TextBox x:Name="TextBoxExperience"
+                     IsReadOnly="True"/>
+
+            <Calendar x:Name="CalendarMeetings"
+                      SelectedDatesChanged="CalendarMeetings_SelectedDatesChanged"/>
+            <Button Content="Добавить встречу"
+                    Click="Button_Click"/>
+
+            <TextBlock x:Name="TextBlockError"
+                       Foreground="Red"/>
+        </StackPanel>
+    </ScrollViewer>
 </Window>
