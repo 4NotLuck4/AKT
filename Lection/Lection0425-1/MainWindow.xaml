@@ -6,20 +6,36 @@
         xmlns:local="clr-namespace:Lection0425_1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel>
-        <ComboBox x:Name="UserComboBox"
-                  IsEditable="True"
-                  Width="1500"/>
-
-
-        <ListBox x:Name="UserListBox" Height="100">
-            <TextBlock Text="123"/>
-            <StackPanel Orientation="Horizontal">
-                <CheckBox Content="123"/>
-                <ListBoxItem Content="123"/>
+    <Window.Resources>
+        <DataTemplate x:Key="FileFullInfoTemplate">
+            <StackPanel>
+                <TextBlock Text="{Binding Name}" FontSize="20" Foreground="Red"/>
+                <TextBlock Text="{Binding Legth}"/>
+                <TextBlock Text="{Binding FullName}"/>
+                <Button x:Name="ShowButton" Content="Show" Click="ShowButton_Click"/>
             </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    
+    <StackPanel>
+        <ListView x:Name="FilesListView" Height="300"
+                  ItemTemplate="{StaticResource FileFullInfoTemplate}"
+                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
 
-        </ListBox>
+        <Button x:Name="ChangeButton" Content=""
+                Click="ChangeButton_Click"/>
+
+        <TextBlock Text="---" Height="300"/>
+
+        <ComboBox x:Name="UserComboBox"
+                  IsEditable="True"/>
+
         <ListView x:Name="FilesListBox" Height="200"
                   SelectionMode="Extended"
                   ScrollViewer.CanContentScroll="False"
