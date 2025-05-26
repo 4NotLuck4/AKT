@@ -6,10 +6,12 @@
         xmlns:local="clr-namespace:Lection0526"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+        WindowStartupLocation="CenterScreen">
     <StackPanel>
         <Button x:Name="OpenButton" Content="Open" Click="OpenButton_Click"/>
         <Button x:Name="SaveButton" Content="Open" Click="SaveButton_Click"/>
         <Button x:Name="PrintButton" Content="Open" Click="PrintButton_Click"/>
+        <Button x:Name="ColorButton" Content="Color" Click="ColorButton_Click"/>
     </StackPanel>
 </Window>

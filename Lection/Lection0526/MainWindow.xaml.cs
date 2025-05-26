@@ -21,8 +21,6 @@ namespace Lection0526
         public MainWindow()
         {
             InitializeComponent();
-
-            
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -46,23 +44,60 @@ namespace Lection0526
                 dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); // открыть сразу чтото
             };
             dialog.InitialDirectory = Environment.CurrentDirectory;
-            //dialog.InitialDirectory = Path.Combine(@"c:", "Temp", "ispp31"); //
+            //dialog.InitialDirectory = Path.Combine(@"c:", "Temp", "ispp31"); //нужна библиотека ...
             dialog.Multiselect = true; // несколько сразу
 
             dialog.ShowDialog();
 
             var fileName = dialog.FileName; //если одно окно
-            var fileNames = dialog.FileNames;//если несколько окон
+            var fileNames = dialog.FileNames;//если несколько окон // только для OpenFileDialog
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog dialog = new();  //Ctrl+N
+            SaveFileDialog dialog = new()  //Ctrl+S
+            {
+                Filter = "текстовые файлы|*.txt;*.html;*.csv|все файлы|*.*",
+                Title = "Выберите имя файла", // Заголовок проводника
+                FilterIndex = 2,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) // открыть сразу чтото
+            }
+            ;
+            dialog.InitialDirectory = Environment.CurrentDirectory;
+            //dialog.InitialDirectory = Path.Combine(@"c:", "Temp", "ispp31"); //нужна библиотека ...
+
+            dialog.ShowDialog();
+
+            var fileName = dialog.FileName; //если одно окно
         }
 
         private void PrintButton_Click(object sender, RoutedEventArgs e)
         {
-            PrintDialog dialog = new();  //Ctrl+P
+            //PrintDialog dialog = new();  //Ctrl+P
+
+            //dialog.ShowDialog();
+
+            //dialog.PrintVisual(panel, "print stackPanel");  //Canvas
+            ////dialog.PrintDocument(...);
+        }
+
+        private void ColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            ColorDialog dialog = new();
+            
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            dialog.Owner = this;
+
+            Hide();
+            Close();
+
+            if(dialog.ShowDialog() != true) 
+                return;
+
+            Show();
+            Background = new SolidColorBrush(dialog.Color);
+
+
         }
     }
 }
