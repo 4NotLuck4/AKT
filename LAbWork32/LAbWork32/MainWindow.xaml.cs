@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LAbWork32
+namespace LabWork32
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -20,5 +20,6 @@ namespace LAbWork32
         {
             InitializeComponent();
         }
+
     }
 }

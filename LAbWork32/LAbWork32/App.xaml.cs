@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace LAbWork32
+namespace LabWork32
 {
     /// <summary>
     /// Interaction logic for App.xaml
