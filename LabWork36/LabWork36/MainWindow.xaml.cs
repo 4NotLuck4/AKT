@@ -23,7 +23,18 @@ namespace LabWork36
 
         private void NewWindow_Click(object sender, RoutedEventArgs e)
         {
-            
+            MainWindow dialog = new MainWindow();
+            dialog.Show();
+        }
+
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            CloseWindow dialog = new CloseWindow();
+            if (dialog.ShowDialog() != true)
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

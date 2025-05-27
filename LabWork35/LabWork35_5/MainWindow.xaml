@@ -11,7 +11,7 @@
         <Border>
             <Canvas x:Name="PrintContainer">
                 <Ellipse Canvas.Left="50" Canvas.Top="50" Width="100" Height="100" Fill="LightGoldenrodYellow"/>
-                <TextBlock Canvas.Left="85" Canvas.Top="90" FontSize="16" Text="text"/>
+                <TextBlock Canvas.Left="70" Canvas.Top="90" FontSize="16" Text="Print text"/>
             </Canvas>
         </Border>
     </StackPanel>

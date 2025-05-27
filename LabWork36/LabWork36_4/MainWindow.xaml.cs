@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LabWork35_5
+namespace LabWork36_4
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -20,13 +20,9 @@ namespace LabWork35_5
         {
             InitializeComponent();
         }
-        private void PrintButton_Click(object sender, RoutedEventArgs e)
-        {
-            PrintDialog dialog = new();
 
-            if (dialog.ShowDialog() != true)
-                return;
-            dialog.PrintVisual(PrintContainer, "печать контейнера");
+        private void Login_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }

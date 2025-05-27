@@ -1,0 +1,23 @@
+﻿<Window x:Class="LabWork36.CloseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LabWork36"
+        mc:Ignorable="d"
+        Title="CloseWindow" Height="118" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
+        </Grid.ColumnDefinitions>
+        <Image Source="/zombie ball.png"  Grid.Column="0" Margin="10"/>
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="Вы хотите закрыть приложение?" Height="40" Width="211"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+                <Button Content="Да" Background="LightGreen" IsDefault="True" Width="80" Margin="5" Click="Button_Click"/>
+                <Button Content="Нет" Background="PaleVioletRed" IsCancel="True" Width="80" Margin="5"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

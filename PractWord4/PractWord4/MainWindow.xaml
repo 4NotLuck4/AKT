@@ -1,0 +1,39 @@
+﻿<Window x:Class="PractWord4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:PractWord4"
+        Title="Games" Height="450" Width="800">
+    <Window.DataContext>
+        <local:GameViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <DataGrid x:Name="GamesDataGrid"
+                  ItemsSource="{Binding Games}"
+                  AutoGenerateColumns="False"
+                  SelectedItem="{Binding SelectedGame}"
+                  SelectionChanged="GamesDataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding IdGame}"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Описание" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Категория" Binding="{Binding Category}"/>
+                <DataGridTextColumn Header="Цена" Binding="{Binding Price}"/>
+                <DataGridTextColumn Header="Скидка" Binding="{Binding Sale}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Orientation="Vertical" Margin="10,250,10,10">
+            <TextBlock Text="Имя: "/>
+            <TextBox Text="{Binding SelectedGames.Name, UpdateSourceTrigger=PropertyChanged}"
+                     x:Name="NameTextBox"/>
+            <TextBlock Text="Описание: "/>
+            <TextBox Text="{Binding SelectedGames.Description, UpdateSourceTrigger=PropertyChanged}"
+                     x:Name="DescriptionTextBox"/>
+            <TextBlock Text="Цена: "/>
+            <TextBox Text="{Binding SelectedGames.Price, UpdateSourceTrigger=PropertyChanged}"
+                     x:Name="PriceTextBox"/>
+            <TextBlock Text="Распродажа: "/>
+            <TextBox Text="{Binding SelectedGames.Sale, UpdateSourceTrigger=PropertyChanged}"
+                     x:Name="SaleTextBox"/>
+        </StackPanel>
+    </Grid>
+</Window>

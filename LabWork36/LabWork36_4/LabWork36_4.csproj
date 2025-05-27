@@ -8,14 +8,4 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="zombie ball.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <SplashScreen Include="zombie ball.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </SplashScreen>
-  </ItemGroup>
-
 </Project>
