@@ -22,6 +22,12 @@ namespace Letion0527
             NameTextBox.DataContext = cat.Id;
             DateTime date = DateTime.Now;
             YearTextBox.DataContext = date;
+
+
+
+
+
+            HasAnimatedProperties.Settings.Default.Save();
         }
     }
 }

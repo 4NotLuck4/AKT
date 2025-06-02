@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Task1.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+            <Entry x:Name="SearchEntry" TextChanged="SearchEntry_TextChanged"/>
+            <StackLayout Orientation="Horizontal">
+                <Entry x:Name="SizeEntry" Text="0" VerticalTextAlignment="Center" TextChanged="SizeEntry_TextChanged"/>
+                <Label Text="Б" VerticalTextAlignment="Center"/>
+                <RadioButton Content="Больше или равно" CheckedChanged="RadioButton_CheckedChanged"/>
+                <RadioButton Content="Меньше или равно" CheckedChanged="RadioButton_CheckedChanged"/>
+                <RadioButton Content="Все файлы" CheckedChanged="RadioButton_CheckedChanged"/>
+            </StackLayout>
+            
+            <StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Больше или равно" VerticalTextAlignment="Center"/>
+                    <CheckBox x:Name="GreaterOrEqualCheckBox" CheckedChanged="GreaterOrEqualCheckBox_CheckedChanged"/>
+                    <Entry x:Name="GreaterOrEqualEntry" TextChanged="GreaterOrEqualEntry_TextChanged"/>
+                    <Label Text="Б" VerticalTextAlignment="Center"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Меньше или равно" VerticalTextAlignment="Center"/>
+                    <CheckBox x:Name="LessOrEqualCheckBox" CheckedChanged="LessOrEqualCheckBox_CheckedChanged"/>
+                    <Entry x:Name="LessOrEqualEntry" TextChanged="LessOrEqualEntry_TextChanged"/>
+                    <Label Text="Б" VerticalTextAlignment="Center"/>
+                </StackLayout>
+            </StackLayout>
+            <Button x:Name="ResetFilterButton" Clicked="ResetFilterButton_Clicked" Text="Сбросить фильтр"/>
+            <Label x:Name="CountLabel"/>
+            <ListView x:Name="FilesListView">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.View>
+                                <Grid Padding="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding Name}" Grid.Column="0"/>
+                                    <Label Text="{Binding Extension}" Grid.Column="1"/>
+                                    <Label Text="{Binding Directory}" Grid.Column="2"/>
+                                    <Label Text="{Binding Length}" Grid.Column="3"/>
+                                    <Label Text="{Binding CreationTime}" Grid.Column="4"/>
+                                    <Label Text="{Binding LastWriteTime}" Grid.Column="5"/>
+                                </Grid>
+                            </ViewCell.View>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
