@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LabWork38.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+            <Label x:Name="CountLabel"/>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Размер страницы: " VerticalOptions="Center"/>
+                <Picker x:Name="SizePicker" SelectedIndexChanged="SizePicker_SelectedIndexChanged" SelectedIndex="1">
+                    <Picker.Items>
+                        <x:String>5</x:String>
+                        <x:String>10</x:String>
+                        <x:String>20</x:String>
+                        <x:String>50</x:String>
+                    </Picker.Items>
+                </Picker>
+            </StackLayout>
+            <ListView x:Name="FilesListView">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.View>
+                                <Grid Padding="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding Name}" Grid.Column="0"/>
+                                    <Label Text="{Binding Length}" Grid.Column="1"/>
+                                    <Label Text="{Binding CreationTime}" Grid.Column="2"/>
+                                </Grid>
+                            </ViewCell.View>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button x:Name="ShowMoreButton" Text="Показать еще" Clicked="ShowMoreButton_Clicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
