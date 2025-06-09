@@ -20,8 +20,22 @@ namespace MSSQLDataAccessLayer
                     Password = Password,
                     TrustServerCertificate = true
                 };
-                
+
                 return builder.ConnectionString;
+            }
+        }
+        public static List<Game> Games 
+        {
+            get
+            {
+                using (SqlConnection connection = new(ConnectionString))
+                {
+                    connection.Open();
+
+                    SqlCommand command = new("SELECT * FROM Game", connection);
+
+                    return command.ExecuteScalar();
+                }
             }
         }
 
