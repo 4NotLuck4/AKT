@@ -1,0 +1,1 @@
+﻿SqliteDataBase.CreateDataBase("GamesStore.sqlite");
