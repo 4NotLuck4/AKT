@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace DbLibrary
 {
@@ -11,6 +13,17 @@ namespace DbLibrary
             connection.Open();
             SqlCommand command = new(query, connection);
             command.ExecuteNonQuery();
+        }
+
+        public static Review? GetReviews(Review id)
+        {
+            IDbConnection db = new SqlConnection(ConnectionString);
+            return db.QueryFirstOrDefault<Review>("SELECT * FROM Review WHERE ID=@id", new { id });
+        }
+        public static Review? UpdateReviews(Review review)
+        {
+            IDbConnection db = new SqlConnection(ConnectionString);
+            return db.Execute("UPDATE Review SET FROM Review WHERE ID=@id", new { review });
         }
     }
 }

@@ -1,18 +1,39 @@
-﻿using Lection0605;
+﻿using DbLibrary;
+using DbLibrary.Database;
+using DbLibrary.Repositories;
+using Lection0605;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using System.Data;
 
+
+string connectionString = "Data Source=mssql;Initial Catalog=ispp3102;Persist Security Info=True;User ID=ispp3102;Password=3102;Encrypt=True;Trust Server Certificate=True";
+IDatabaseFactory factory = new MsSqlFactory(connectionString);
+ReviewRepository repository = new(factory);
+
+var reviews = repository.GetReviews();
+var review = repository.GetReviews(3);
+review.Comment = "ewfaff 11 wedw";
+repository.UpdateReviews(review);
+
+
+
 Console.WriteLine("ADO.NET");
+
+//var reviews = DatabaseContext.GetReviews();
+//var review = DatabaseContext.GetReviews(3);
+
+
+
+
 // string
-DatadaseContext.ExecuteCommand(query);
-TestMssql();
+//DatadaseContext.ExecuteCommand(query);
+//TestMssql();
 
 void TestMssql()
 {
     Console.WriteLine("Microsoft SQL Server");
 
-    string connectionString = "Data Source=mssql;Initial Catalog=ispp3102;Persist Security Info=True;User ID=ispp3102;Password=3102;Encrypt=True;Trust Server Certificate=True";
 
     SqlConnectionStringBuilder builder = new()
     {
