@@ -1,0 +1,22 @@
+﻿@page
+@model WebApp.Pages.CreateModel
+@{
+}
+
+<h1>Create</h1>
+
+<form method="post">
+    <label asp-for="Review.GameId" />
+    <input asp-for="Review.GameId" />
+    <br />
+    <label asp-for="Review.User" />
+    <input asp-for="Review.User" />
+    <br />
+    <label asp-for="Review.Comment" />
+    <input asp-for="Review.Comment" />
+    <br />
+    <label asp-for="Review.PublicationDate" />
+    <input asp-for="Review.PublicationDate" />
+    <br />
+    <button type="submit" class="btn">save</button>
+</form>

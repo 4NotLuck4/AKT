@@ -1,0 +1,21 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<h1>Reviews</h1>
+
+<a asp-page="./Create" class="btn"> create </a>
+@foreach(var review in Model.Reviews)
+{
+    <h2>@review.GameId</h2>
+    <div>@review.Comment</div>
+    <div>@review.PublicationDate</div>
+
+    <a asp-page="./Details" asp-route-id="@review.Id class="btn"> details </a>
+
+    <form asp-route-id="@review.Id">
+        <button type ="submit"> delete </button>
+    </form>
+}
