@@ -1,0 +1,259 @@
+// IDbConnectionFactory.cs
+public interface IDbConnectionFactory
+{
+    IDbConnection CreateConnection();
+}
+
+// SqlConnectionFactory.cs (для MSSQL)
+public class SqlConnectionFactory(string connectionString) : IDbConnectionFactory
+{
+    private readonly string _connectionString = connectionString;
+
+    public IDbConnection CreateConnection()
+    {
+        var connection = new SqlConnection(_connectionString);
+        connection.Open();
+        return connection;
+    }
+}
+
+// SqliteConnectionFactory.cs
+public class SqliteConnectionFactory(string connectionString) : IDbConnectionFactory
+{
+    private readonly string _connectionString = connectionString;
+
+    public IDbConnection CreateConnection()
+    {
+        var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+        return connection;
+    }
+}
+
+//
+
+public class GamesRepository(IDbConnectionFactory connectionFactory)
+{
+    private readonly IDbConnection _connection = connectionFactory.CreateConnection();
+
+    public IEnumerable<Game> GetAll()
+    {
+        return _connection.Query<Game>("SELECT * FROM Games");
+    }
+
+    public Game? GetById(int id)
+    {
+        return _connection.QueryFirstOrDefault<Game>(
+            "SELECT * FROM Games WHERE Id = @Id", 
+            new { Id = id });
+    }
+
+    public void Create(Game game)
+    {
+        const string sql = """
+            INSERT INTO Games (Title, Genre, ReleaseDate, Price) 
+            VALUES (@Title, @Genre, @ReleaseDate, @Price);
+            SELECT CAST(SCOPE_IDENTITY() as int);
+            """;
+        
+        var id = _connection.QuerySingle<int>(sql, game);
+        game.Id = id;
+    }
+
+    public void Update(Game game)
+    {
+        const string sql = """
+            UPDATE Games 
+            SET Title = @Title, 
+                Genre = @Genre, 
+                ReleaseDate = @ReleaseDate, 
+                Price = @Price 
+            WHERE Id = @Id
+            """;
+        
+        _connection.Execute(sql, game);
+    }
+
+    public void Delete(int id)
+    {
+        _connection.Execute(
+            "DELETE FROM Games WHERE Id = @Id", 
+            new { Id = id });
+    }
+}
+
+//
+
+// Пример использования
+var connectionFactory = new SqlConnectionFactory("YourConnectionString");
+var repository = new GamesRepository(connectionFactory);
+
+// Create
+var newGame = new Game { Title = "Elden Ring", Genre = "RPG", Price = 59.99m };
+repository.Create(newGame);
+
+// Read
+var games = repository.GetAll();
+var game = repository.GetById(1);
+
+// Update
+game.Price = 49.99m;
+repository.Update(game);
+
+// Delete
+repository.Delete(1);
+
+//
+
+// Program.cs
+builder.Services.AddSingleton<IDbConnectionFactory>(new SqlConnectionFactory(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddScoped<GamesRepository>();
+
+//
+
+[ApiController]
+[Route("api/[controller]")]
+public class GamesController : ControllerBase
+{
+    private readonly GamesRepository _repository;
+
+    public GamesController(GamesRepository repository)
+    {
+        _repository = repository;
+    }
+
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        return Ok(_repository.GetAll());
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        var game = _repository.GetById(id);
+        return game is null ? NotFound() : Ok(game);
+    }
+
+    [HttpPost]
+    public IActionResult Create(Game game)
+    {
+        _repository.Create(game);
+        return CreatedAtAction(nameof(GetById), new { id = game.Id }, game);
+    }
+
+    [HttpPut]
+    public IActionResult Update(Game game)
+    {
+        _repository.Update(game);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        _repository.Delete(id);
+        return NoContent();
+    }
+}
+
+//
+
+public class GamesService(GamesRepository repository, ILogger<GamesService> logger)
+{
+    private readonly GamesRepository _repository = repository;
+    private readonly ILogger<GamesService> _logger = logger;
+
+    public IEnumerable<Game> GetAll()
+    {
+        _logger.LogInformation("Getting all games");
+        return _repository.GetAll();
+    }
+
+    public Game? GetById(int id)
+    {
+        _logger.LogInformation("Getting game with ID: {Id}", id);
+        return _repository.GetById(id);
+    }
+
+    public void Create(Game game)
+    {
+        if (game is null)
+            throw new ArgumentNullException(nameof(game));
+            
+        if (string.IsNullOrWhiteSpace(game.Title))
+            throw new ArgumentException("Title is required");
+            
+        if (game.Price < 0)
+            throw new ArgumentException("Price cannot be negative");
+
+        _logger.LogInformation("Creating new game: {Title}", game.Title);
+        _repository.Create(game);
+    }
+
+    public void Update(Game game)
+    {
+        if (game is null)
+            throw new ArgumentNullException(nameof(game));
+            
+        if (game.Id <= 0)
+            throw new ArgumentException("Invalid game ID");
+            
+        if (string.IsNullOrWhiteSpace(game.Title))
+            throw new ArgumentException("Title is required");
+
+        _logger.LogInformation("Updating game with ID: {Id}", game.Id);
+        _repository.Update(game);
+    }
+
+    public void Delete(int id)
+    {
+        if (id <= 0)
+            throw new ArgumentException("Invalid game ID");
+
+        _logger.LogInformation("Deleting game with ID: {Id}", id);
+        _repository.Delete(id);
+    }
+}
+
+//
+
+// Program.cs в Web API
+builder.Services.AddScoped<GamesService>();
+builder.Services.AddSingleton<IDbConnectionFactory>(new SqlConnectionFactory(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddScoped<GamesRepository>();
+
+//
+
+[ApiController]
+[Route("api/[controller]")]
+public class GamesController : ControllerBase
+{
+    private readonly GamesService _service;
+
+    public GamesController(GamesService service)
+    {
+        _service = service;
+    }
+
+    // Методы остаются такими же, но используют _service вместо _repository
+}
+
+//
+
+// Пример тестирования в клиентском приложении
+var connectionFactory = new SqlConnectionFactory("YourConnectionString");
+var repository = new GamesRepository(connectionFactory);
+var logger = LoggerFactory.Create(b => b.AddConsole()).CreateLogger<GamesService>();
+var service = new GamesService(repository, logger);
+
+try
+{
+    var invalidGame = new Game { Title = "", Price = -10 };
+    service.Create(invalidGame);
+}
+catch (ArgumentException ex)
+{
+    Console.WriteLine($"Validation error: {ex.Message}");
+}
+
