@@ -25,7 +25,7 @@ namespace WebApp.Pages
         public async Task<IActionResult> OnPostAsync()
         {
             await _service.UpdateReviewAsync(Review);
-            return RedirectToPage("/.Index");
+            return RedirectToPage("./Index");
         }
     }
 }
