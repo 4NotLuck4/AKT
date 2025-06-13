@@ -1,0 +1,331 @@
+﻿# Решение для задания по созданию сервиса и клиентов для работы с API игр
+
+## 5.1 Создание сервиса для работы с API
+
+```csharp
+// GamesService.cs в проекте API services
+using System.Net.Http.Json;
+
+public class GamesService
+{
+    private readonly HttpClient _httpClient;
+
+    public GamesService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
+
+    // Методы для получения данных
+    public async Task<IEnumerable<Game>> GetAllGamesAsync()
+    {
+        return await _httpClient.GetFromJsonAsync<IEnumerable<Game>>("api/games") ?? new List<Game>();
+    }
+
+    public async Task<Game> GetGameByIdAsync(int id)
+    {
+        return await _httpClient.GetFromJsonAsync<Game>($"api/games/{id}");
+    }
+
+    // Методы для редактирования данных
+    public async Task<Game> CreateGameAsync(Game game)
+    {
+        var response = await _httpClient.PostAsJsonAsync("api/games", game);
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<Game>();
+    }
+
+    public async Task UpdateGameAsync(int id, Game game)
+    {
+        var response = await _httpClient.PutAsJsonAsync($"api/games/{id}", game);
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task DeleteGameAsync(int id)
+    {
+        var response = await _httpClient.DeleteAsync($"api/games/{id}");
+        response.EnsureSuccessStatusCode();
+    }
+}
+
+public class Game
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public string Description { get; set; }
+    // Другие свойства по необходимости
+}
+```
+
+## 5.2 Создание консольного клиента
+
+```csharp
+// Program.cs в консольном проекте
+using System;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        var httpClient = new HttpClient
+        {
+            BaseAddress = new Uri("https://localhost:5001/") // Базовый адрес API
+        };
+
+        var gamesService = new GamesService(httpClient);
+
+        try
+        {
+            // Получение всех игр
+            Console.WriteLine("All games:");
+            var games = await gamesService.GetAllGamesAsync();
+            foreach (var game in games)
+            {
+                Console.WriteLine($"{game.Id}: {game.Name} - {game.Price:C}");
+            }
+
+            // Создание новой игры
+            Console.WriteLine("\nCreating new game...");
+            var newGame = new Game { Name = "New Game", Price = 49.99m, Description = "New game description" };
+            var createdGame = await gamesService.CreateGameAsync(newGame);
+            Console.WriteLine($"Created game with ID: {createdGame.Id}");
+
+            // Обновление игры
+            Console.WriteLine("\nUpdating game...");
+            createdGame.Price = 59.99m;
+            await gamesService.UpdateGameAsync(createdGame.Id, createdGame);
+            Console.WriteLine("Game updated");
+
+            // Удаление игры
+            Console.WriteLine("\nDeleting game...");
+            await gamesService.DeleteGameAsync(createdGame.Id);
+            Console.WriteLine("Game deleted");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+}
+```
+
+## 5.3 Создание веб-клиента для чтения данных
+
+1. В `Program.cs` веб-приложения добавить регистрацию сервиса:
+
+```csharp
+builder.Services.AddHttpClient<GamesService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:5001/");
+});
+```
+
+2. Создать страницу для отображения списка игр (`Index.cshtml`):
+
+```html
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Games";
+}
+
+<h1>Games</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var game in Model.Games)
+        {
+            <tr>
+                <td>@game.Name</td>
+                <td>@game.Price.ToString("C")</td>
+                <td>
+                    <a href="/GameDetails/@game.Id" class="btn btn-info">Details</a>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@game.Id" style="display:inline">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/CreateGame" class="btn btn-primary">Create New</a>
+```
+
+3. Код для страницы (`Index.cshtml.cs`):
+
+```csharp
+public class IndexModel : PageModel
+{
+    private readonly GamesService _gamesService;
+
+    public IndexModel(GamesService gamesService)
+    {
+        _gamesService = gamesService;
+    }
+
+    public IEnumerable<Game> Games { get; set; }
+
+    public async Task OnGetAsync()
+    {
+        Games = await _gamesService.GetAllGamesAsync();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync(int id)
+    {
+        await _gamesService.DeleteGameAsync(id);
+        return RedirectToPage();
+    }
+}
+```
+
+4. Создать страницу для просмотра деталей игры (`GameDetails.cshtml`):
+
+```html
+@page "{id}"
+@model GameDetailsModel
+@{
+    ViewData["Title"] = "Game Details";
+}
+
+<h1>Game Details</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Game.Name"></label>
+        <input asp-for="Game.Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Game.Price"></label>
+        <input asp-for="Game.Price" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Game.Description"></label>
+        <textarea asp-for="Game.Description" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="/" class="btn btn-secondary">Back to List</a>
+</form>
+```
+
+5. Код для страницы деталей (`GameDetails.cshtml.cs`):
+
+```csharp
+public class GameDetailsModel : PageModel
+{
+    private readonly GamesService _gamesService;
+
+    public GameDetailsModel(GamesService gamesService)
+    {
+        _gamesService = gamesService;
+    }
+
+    [BindProperty]
+    public Game Game { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int id)
+    {
+        Game = await _gamesService.GetGameByIdAsync(id);
+        if (Game == null)
+        {
+            return NotFound();
+        }
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid)
+        {
+            return Page();
+        }
+
+        await _gamesService.UpdateGameAsync(Game.Id, Game);
+        return RedirectToPage("/Index");
+    }
+}
+```
+
+## 5.4 Реализация редактирования данных в веб-клиенте
+
+1. Добавьте страницу для создания новой игры (`CreateGame.cshtml`):
+
+```html
+@page
+@model CreateGameModel
+@{
+    ViewData["Title"] = "Create New Game";
+}
+
+<h1>Create New Game</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Game.Name"></label>
+        <input asp-for="Game.Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Game.Price"></label>
+        <input asp-for="Game.Price" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Game.Description"></label>
+        <textarea asp-for="Game.Description" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="/" class="btn btn-secondary">Cancel</a>
+</form>
+```
+
+2. Код для страницы создания (`CreateGame.cshtml.cs`):
+
+```csharp
+public class CreateGameModel : PageModel
+{
+    private readonly GamesService _gamesService;
+
+    public CreateGameModel(GamesService gamesService)
+    {
+        _gamesService = gamesService;
+    }
+
+    [BindProperty]
+    public Game Game { get; set; } = new Game();
+
+    public void OnGet()
+    {
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid)
+        {
+            return Page();
+        }
+
+        var createdGame = await _gamesService.CreateGameAsync(Game);
+        return RedirectToPage("/Index");
+    }
+}
+```
+
+3. Обновите страницу Index (как показано выше) с кнопками удаления и создания.
+
+4. Обновите страницу GameDetails (как показано выше) с кнопкой сохранения.
+
+Это полное решение для задания, включающее:
+- Сервис для работы с API
+- Консольный клиент для тестирования API
+- Веб-клиент с возможностями:
+  - Просмотра списка игр
+  - Просмотра деталей игры
+  - Редактирования игры
+  - Удаления игры
+  - Создания новой игры
