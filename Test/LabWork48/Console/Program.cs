@@ -1,4 +1,5 @@
-﻿using System;
+﻿using APIServices;
+using System;
 
 class Program
 {
@@ -18,12 +19,12 @@ class Program
             var games = await gamesService.GetAllGamesAsync();
             foreach (var game in games)
             {
-                Console.WriteLine($"{game.Id}: {game.Name} - {game.Price:C}");
+                Console.WriteLine($"{game.Id}: {game.Title} - {game.Price:C}");
             }
 
             // Создание новой игры
             Console.WriteLine("\nCreating new game...");
-            var newGame = new Game { Name = "New Game", Price = 49.99m, Description = "New game description" };
+            var newGame = new Game { Title = "New Game", Price = 49.99m, Description = "New game description" };
             var createdGame = await gamesService.CreateGameAsync(newGame);
             Console.WriteLine($"Created game with ID: {createdGame.Id}");
 
@@ -38,9 +39,9 @@ class Program
             await gamesService.DeleteGameAsync(createdGame.Id);
             Console.WriteLine("Game deleted");
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            Console.WriteLine("Error");
         }
     }
 }
