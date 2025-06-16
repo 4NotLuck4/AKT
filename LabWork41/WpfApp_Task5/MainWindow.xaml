@@ -1,0 +1,26 @@
+﻿<Window x:Class="WpfApp_Task5.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp_Task5"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Ellipse x:Name="Circle" Width="150" Height="150">
+            <Ellipse.Fill>
+                <RadialGradientBrush x:Name="GradientBrush">
+                    <GradientStop Color="Red" Offset="0"/>
+                    <GradientStop Color="Blue" Offset="1"/>
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+
+        <Button Grid.Row="1" Content="Изменить цвет" Click="Button_Click"/>
+    </Grid>
+</Window>
