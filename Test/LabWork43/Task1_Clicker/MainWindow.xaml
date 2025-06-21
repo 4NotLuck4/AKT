@@ -1,0 +1,23 @@
+﻿<Window x:Class="Task1_Clicker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task1_Clicker"
+        mc:Ignorable="d"
+        Title="Cookie Clicker" Height="450" Width="800">
+    <Viewbox>
+        <Canvas Width="800" Height="450">
+            <!-- Элементы интерфейса -->
+            <Label x:Name="CookieCounterLabel" Canvas.Left="50" Canvas.Top="50" FontSize="24"/>
+            <Label x:Name="GrandmaCounterLabel" Canvas.Left="50" Canvas.Top="100" FontSize="24"/>
+
+            <Ellipse x:Name="Cookie" Canvas.Left="300" Canvas.Top="150" Width="100" Height="100" Cursor="Hand"/>
+
+            <Rectangle x:Name="GrandmaButton" Canvas.Left="500" Canvas.Top="150" Width="150" Height="60" 
+                       Fill="LightGray" Cursor="Hand" Opacity="0.5" IsEnabled="False">
+                <TextBlock Text="Купить бабушку (15)" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Rectangle>
+        </Canvas>
+    </Viewbox>
+</Window>
