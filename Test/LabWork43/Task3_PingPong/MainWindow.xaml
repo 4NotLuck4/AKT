@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Task3_PingPong"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Title="Ping Pong Game" Height="450" Width="800" KeyDown="Window_KeyDown">
+    <Canvas x:Name="gameCanvas" Background="Black">
+        <Rectangle x:Name="paddle" 
+                   Width="100" 
+                   Height="20" 
+                   Fill="White"
+                   Canvas.Bottom="10"/>
+        <Ellipse x:Name="ball" 
+                 Width="20" 
+                 Height="20" 
+                 Fill="Red"/>
+    </Canvas>
 </Window>

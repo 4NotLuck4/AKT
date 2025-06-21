@@ -16,8 +16,8 @@
 
             <Rectangle x:Name="GrandmaButton" Canvas.Left="500" Canvas.Top="150" Width="150" Height="60" 
                        Fill="LightGray" Cursor="Hand" Opacity="0.5" IsEnabled="False">
-                <TextBlock Text="Купить бабушку (15)" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Rectangle>
+                <TextBlock Text="Купить бабушку (15)" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Canvas>
     </Viewbox>
 </Window>

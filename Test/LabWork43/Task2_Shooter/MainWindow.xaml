@@ -5,8 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Task2_Shooter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Title="Shooter Game" Height="450" Width="800">
+    <Viewbox>
+        <Canvas x:Name="gameCanvas" Width="800" Height="450">
+            <Canvas.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF81D8E4"/>
+                    <GradientStop Color="#FF35B72A" Offset="0.834"/>
+                    <GradientStop Color="#FFCAD874" Offset="0.726"/>
+                    <GradientStop Color="#FF3D9E36" Offset="1"/>
+                </LinearGradientBrush>
+            </Canvas.Background>
+            <Label x:Name="scoreLabel" 
+                   FontSize="20"
+                   Canvas.Left="10" 
+                   Canvas.Top="10">
+            </Label>
+        </Canvas>
+    </Viewbox>
 </Window>

@@ -16,9 +16,13 @@ namespace Task2_Shooter
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly GameManager _gameManager;
+
         public MainWindow()
         {
             InitializeComponent();
+            _gameManager = new GameManager(gameCanvas, scoreLabel);
+            _gameManager.StartGame();
         }
     }
 }

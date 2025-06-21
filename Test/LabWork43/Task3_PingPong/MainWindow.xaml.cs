@@ -16,9 +16,18 @@ namespace Task3_PingPong
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly GameManager _gameManager;
+
         public MainWindow()
         {
             InitializeComponent();
+            _gameManager = new GameManager(gameCanvas, paddle, ball);
+            _gameManager.StartGame();
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            _gameManager.HandleKeyPress(e.Key);
         }
     }
 }
