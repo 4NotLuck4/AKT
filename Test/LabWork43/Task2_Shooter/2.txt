@@ -1,0 +1,192 @@
+﻿# Рефакторинг приложения-шутера
+
+Я проведу рефакторинг кода из файла Shooter.pdf, разделю его на отдельные файлы и улучшу структуру приложения.
+
+## Структура проекта
+
+1. **MainWindow.xaml** - основной файл разметки
+2. **MainWindow.xaml.cs** - основная логика окна
+3. **GameManager.cs** - управление игровым процессом
+4. **Enemy.cs** - класс врага
+5. **Player.cs** - класс игрока (если потребуется)
+
+## Реализация
+
+### MainWindow.xaml
+
+```xml
+<Window x:Class="ShooterGame.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Shooter Game" Height="450" Width="800">
+    <Viewbox>
+        <Canvas x:Name="gameCanvas" Width="800" Height="450">
+            <Label x:Name="scoreLabel" 
+                   Foreground="White" 
+                   FontSize="20"
+                   Canvas.Left="10" 
+                   Canvas.Top="10"/>
+        </Canvas>
+    </Viewbox>
+</Window>
+```
+
+### MainWindow.xaml.cs
+
+```csharp
+using System.Windows;
+using System.Windows.Controls;
+
+namespace ShooterGame
+{
+    public partial class MainWindow : Window
+    {
+        private readonly GameManager _gameManager;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            _gameManager = new GameManager(gameCanvas, scoreLabel);
+            _gameManager.StartGame();
+        }
+    }
+}
+```
+
+### GameManager.cs
+
+```csharp
+using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Windows.Threading;
+
+namespace ShooterGame
+{
+    public class GameManager
+    {
+        private readonly Canvas _gameCanvas;
+        private readonly Label _scoreLabel;
+        private readonly DispatcherTimer _spawnTimer;
+        private readonly DispatcherTimer _movementTimer;
+        private int _score;
+
+        public GameManager(Canvas gameCanvas, Label scoreLabel)
+        {
+            _gameCanvas = gameCanvas;
+            _scoreLabel = scoreLabel;
+            
+            _spawnTimer = new DispatcherTimer(DispatcherPriority.Render)
+            {
+                Interval = TimeSpan.FromMilliseconds(500)
+            };
+            _spawnTimer.Tick += SpawnEnemy;
+            
+            _movementTimer = new DispatcherTimer(DispatcherPriority.Render)
+            {
+                Interval = TimeSpan.FromMilliseconds(50)
+            };
+            _movementTimer.Tick += MoveEnemies;
+        }
+
+        public void StartGame()
+        {
+            _score = 0;
+            _scoreLabel.Content = _score;
+            _spawnTimer.Start();
+            _movementTimer.Start();
+        }
+
+        private void SpawnEnemy(object sender, EventArgs e)
+        {
+            var enemy = new Enemy(_gameCanvas.ActualWidth);
+            _gameCanvas.Children.Add(enemy.Shape);
+            
+            enemy.Shape.MouseDown += (s, args) => 
+            {
+                _gameCanvas.Children.Remove(enemy.Shape);
+                _score++;
+                _scoreLabel.Content = _score;
+            };
+        }
+
+        private void MoveEnemies(object sender, EventArgs e)
+        {
+            foreach (var enemy in _gameCanvas.Children.OfType<Ellipse>())
+            {
+                var y = Canvas.GetTop(enemy) + 3;
+                Canvas.SetTop(enemy, y);
+                
+                if (y >= _gameCanvas.ActualHeight)
+                {
+                    GameOver();
+                    return;
+                }
+            }
+        }
+
+        private void GameOver()
+        {
+            _spawnTimer.Stop();
+            _movementTimer.Stop();
+            MessageBox.Show("Game Over! Your score: " + _score);
+        }
+    }
+}
+```
+
+### Enemy.cs
+
+```csharp
+using System.Windows.Shapes;
+using System.Windows.Media;
+
+namespace ShooterGame
+{
+    public class Enemy
+    {
+        public Ellipse Shape { get; }
+        private const int Size = 30;
+
+        public Enemy(double canvasWidth)
+        {
+            Shape = new Ellipse
+            {
+                Width = Size,
+                Height = Size,
+                Fill = new SolidColorBrush(Colors.Purple)
+            };
+            
+            var x = new Random().NextDouble() * (canvasWidth - Size);
+            Canvas.SetLeft(Shape, x);
+            Canvas.SetTop(Shape, -Size);
+        }
+    }
+}
+```
+
+## Улучшения по сравнению с оригинальным кодом:
+
+1. **Разделение ответственности**:
+   - Логика игры вынесена в отдельный класс GameManager
+   - Враги представлены отдельным классом Enemy
+
+2. **Устранение дублирования кода**:
+   - Убраны повторяющиеся создания таймеров
+   - Логика обработки событий централизована
+
+3. **Улучшенная структура**:
+   - Код разделен на отдельные файлы
+   - Упрощена навигация по коду
+
+4. **Гибкость**:
+   - Легко добавлять новые функции (например, разные типы врагов)
+   - Проще вносить изменения
+
+5. **Безопасность**:
+   - Проверка границ canvas при создании врагов
+   - Корректная обработка остановки игры
+
+Этот рефакторинг делает код более читаемым, поддерживаемым и расширяемым, сохраняя при этом всю исходную функциональность.
